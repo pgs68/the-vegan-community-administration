@@ -1,34 +1,45 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import './App.css';
-import { BrowserRouter as Router, Redirect, Switch, Route, Link} from "react-router-dom";
+import {Redirect, Switch, Link} from "react-router-dom";
 import PublicRoute from './components/Authentication/PublicRoute'
 import PrivateRoute from './components/Authentication/PrivateRoute'
+import Header from './components/Header'
+
 
 //Scenes
 import Home from './scenes/Home'
 import Login from './scenes/Login'
 
+import { isLoggedInChange, setUserInformation } from './actions/user'
+
 const App = ({
-  firebase
+  firebase,
+  userLogged,
+  isLoggedInChange,
+  setUserInformation
 }) => {
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            setUserInformation(firebase.auth().currentUser.uid)
+            isLoggedInChange(true)
+        } else {
+            // No user is signed in.
+            isLoggedInChange(false)
+        }
+    });    
+  }, [userLogged])
+
   return (
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          </ul>
-        </nav>
+        <Header userLogged={userLogged}/>
         <Switch>
           <PrivateRoute 
             component={Home}
             path="/"
-            isLogedIn={true}
+            isLogedIn={userLogged}
             exact
           />
           <PublicRoute 
@@ -51,7 +62,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-
+  isLoggedInChange,
+  setUserInformation,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
