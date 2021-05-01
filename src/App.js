@@ -1,25 +1,58 @@
-import logo from './logo.svg';
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 import './App.css';
+import { BrowserRouter as Router, Redirect, Switch, Route, Link} from "react-router-dom";
+import PublicRoute from './components/Authentication/PublicRoute'
+import PrivateRoute from './components/Authentication/PrivateRoute'
 
-function App() {
+//Scenes
+import Home from './scenes/Home'
+import Login from './scenes/Login'
+
+const App = ({
+  firebase
+}) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          </ul>
+        </nav>
+        <Switch>
+          <PrivateRoute 
+            component={Home}
+            path="/"
+            isLogedIn={true}
+            exact
+          />
+          <PublicRoute 
+            component={Login}
+            path="/login"
+            exact
+          />
+          <PrivateRoute
+            component={() => <Redirect to={"/"} />}
+            path="/"
+            isLogedIn={true}
+          />        
+        </Switch>
+      </div>
   );
 }
 
-export default App;
+const mapStateToProps = state => ({
+  userLogged: state.user.isLoggedIn
+})
+
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
+export { App }
