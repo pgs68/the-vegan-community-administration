@@ -12,8 +12,7 @@ import Menu from '@material-ui/core/Menu';
 const useStyles = makeStyles(() => ({
     toolbar: {
         display: 'flex',
-        justifyContent: 'space-between',
-        backgroundColor: '#235434'
+        justifyContent: 'space-between'
     }
 }));
 
@@ -29,7 +28,7 @@ const Header = ({
             <div />
             <Typography variant="h6"> TheVeganCommunity </Typography>
             <IconButton edge="end" color="inherit">
-                {true && (
+                {userLogged && (
                     <div>
                         <AccountCircle 
                             onClick={() => setOpenUserOptions(true)}
