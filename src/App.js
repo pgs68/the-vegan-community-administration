@@ -1,38 +1,52 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import './App.css';
-import { BrowserRouter as Router, Redirect, Switch, Route, Link} from "react-router-dom";
+import {Redirect, Switch, Link} from "react-router-dom";
 import PublicRoute from './components/Authentication/PublicRoute'
 import PrivateRoute from './components/Authentication/PrivateRoute'
+import Header from './components/Header'
+
 
 //Scenes
 import Home from './scenes/Home'
 import Login from './scenes/Login'
 
+import { isLoggedInChange, setUserInformation } from './actions/user'
+import { checkUserRolIsAdmin, getUserInformation } from './common/firebaseFunctions'
+
 const App = ({
-  firebase
+  firebase,
+  userLogged,
+  currentUser,
+  isLoggedInChange,
+  setUserInformation
 }) => {
+
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          setUserInformation({email: user.email})
+          isLoggedInChange(true)
+        } else {
+            // No user is signed in.
+            isLoggedInChange(false)
+        }
+    });    
+  }, [userLogged])
+
   return (
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          </ul>
-        </nav>
+        <Header userLogged={userLogged} userLoggedChange={isLoggedInChange}/>
         <Switch>
           <PrivateRoute 
             component={Home}
             path="/"
-            isLogedIn={true}
+            isLogedIn={userLogged}
             exact
           />
           <PublicRoute 
-            component={Login}
+            component={(userLogged && currentUser.email !== '') ? () => <Redirect to={"/"} /> : Login}
             path="/login"
             exact
           />
@@ -47,11 +61,13 @@ const App = ({
 }
 
 const mapStateToProps = state => ({
-  userLogged: state.user.isLoggedIn
+  userLogged: state.user.isLoggedIn,
+  currentUser: state.user.currentUser
 })
 
 const mapDispatchToProps = {
-
+  isLoggedInChange,
+  setUserInformation,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

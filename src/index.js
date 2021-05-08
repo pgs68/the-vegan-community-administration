@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux'
 import store from './store'
 import { BrowserRouter as Router } from "react-router-dom";
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+
 
 import firebase from 'firebase/app'
 require('firebase/auth')
@@ -24,10 +27,29 @@ const firebaseConfig = {
 }
 firebase.initializeApp(firebaseConfig)
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#629749',
+      main: '#33691e',
+      dark: '#003d00',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#ffb04c',
+      main: '#f57f17',
+      dark: '#bc5100',
+      contrastText: '#000',
+    },
+  },
+});
+
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <App firebase={firebase} />
+      <ThemeProvider theme={theme}>
+        <App firebase={firebase} />
+      </ ThemeProvider>
     </Router>
   </Provider>,
   document.getElementById('root')

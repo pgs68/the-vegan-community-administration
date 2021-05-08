@@ -13,9 +13,9 @@ const isLoggedInChange = (value) => ({
     }
 })
 
-const setUserInformation = (uid) => ({
+const setUserInformation = (user) => ({
     type: TypeActionsAuth.SET_USER_INFORMATION,
-    payload: firebase.firestore().collection("usuarios").where('UID', '==', uid).get()
+    payload: { user }
 })
 
 export {
