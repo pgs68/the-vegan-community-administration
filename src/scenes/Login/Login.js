@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react"
+import { connect } from 'react-redux'
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import ErrorMessage from '../../components/ErrorMessage'
+import { login } from '../../common/firebaseFunctions'
+import { setUserInformation, isLoggedInChange } from '../../actions/user'
 
 const useStyles = makeStyles(() => ({
     root:{
@@ -29,19 +33,31 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Login = ({
-
+    setUserInformation,
+    isLoggedInChange
 }) => {
     const classes = useStyles();
     const [user, setUser] = useState({
-        name: '',
+        email: '',
         password: ''
     })
-    const [errorName, setErrorName] = useState(false)
+    const [errorEmail, setErrorEmail] = useState(false)
     const [errorPassword, setErrorPassword] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
-    async function checkForm(){
-        user.name === '' && setErrorName(true)
-        user.password === '' && setErrorPassword(true)
+    const checkForm = () => {
+        var isValid = true
+        if(user.email === ''){
+            setErrorEmail(true)
+            isValid = false
+            setErrorMessage('Faltan campos por rellenar')
+        }
+        if(user.password === ''){
+            setErrorPassword(true)
+            isValid = false
+            setErrorMessage('Faltan campos por rellenar')
+        }
+        isValid && login(user, setErrorMessage, setUserInformation, isLoggedInChange)
     }
 
     return (
@@ -55,13 +71,13 @@ const Login = ({
                         variant="outlined"
                         label="Email"
                         className={classes.form}
-                        error={errorName}
+                        error={errorEmail}
                         color="secondary"
                         onChange={(e) => {
-                            if(e.target.value !== '' && errorName){
-                                setErrorName(false)
+                            if(e.target.value !== '' && errorEmail){
+                                setErrorEmail(false)
                             }
-                            setUser({...user, name: e.target.value})
+                            setUser({...user, email: e.target.value})
                         }}
                     />
                     <TextField 
@@ -78,6 +94,10 @@ const Login = ({
                             setUser({...user, password: e.target.value})
                         }}
                     />
+                    {
+                        (errorMessage !== '') &&
+                        <ErrorMessage message={errorMessage} />
+                    }
                     <Button 
                         color="primary"
                         onClick={() => {
@@ -92,4 +112,14 @@ const Login = ({
     )
 }
 
-export default Login
+const mapStateToProps = state => ({
+    userLogged: state.user.isLoggedIn
+})
+
+const mapDispatchToProps = {
+    setUserInformation,
+    isLoggedInChange
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export { Login }

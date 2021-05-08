@@ -12,19 +12,22 @@ import Home from './scenes/Home'
 import Login from './scenes/Login'
 
 import { isLoggedInChange, setUserInformation } from './actions/user'
+import { checkUserRolIsAdmin, getUserInformation } from './common/firebaseFunctions'
 
 const App = ({
   firebase,
   userLogged,
+  currentUser,
   isLoggedInChange,
   setUserInformation
 }) => {
 
+
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            setUserInformation(firebase.auth().currentUser.uid)
-            isLoggedInChange(true)
+          setUserInformation({email: user.email})
+          isLoggedInChange(true)
         } else {
             // No user is signed in.
             isLoggedInChange(false)
@@ -34,7 +37,7 @@ const App = ({
 
   return (
       <div>
-        <Header userLogged={userLogged}/>
+        <Header userLogged={userLogged} userLoggedChange={isLoggedInChange}/>
         <Switch>
           <PrivateRoute 
             component={Home}
@@ -43,7 +46,7 @@ const App = ({
             exact
           />
           <PublicRoute 
-            component={Login}
+            component={(userLogged && currentUser.email !== '') ? () => <Redirect to={"/"} /> : Login}
             path="/login"
             exact
           />
@@ -58,7 +61,8 @@ const App = ({
 }
 
 const mapStateToProps = state => ({
-  userLogged: state.user.isLoggedIn
+  userLogged: state.user.isLoggedIn,
+  currentUser: state.user.currentUser
 })
 
 const mapDispatchToProps = {

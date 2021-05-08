@@ -7,6 +7,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { logout } from '../common/firebaseFunctions'
 
 
 const useStyles = makeStyles(() => ({
@@ -17,7 +18,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Header = ({
-    userLogged
+    userLogged,
+    userLoggedChange
 }) => {
     const classes = useStyles();
     const [openUserOptions, setOpenUserOptions] = useState(false)
@@ -48,6 +50,7 @@ const Header = ({
                         >
                             <MenuItem onClick={() => {
                                 setOpenUserOptions(false)
+                                logout(userLoggedChange)
                             }}> 
                                 Cerrar sesión 
                             </MenuItem>

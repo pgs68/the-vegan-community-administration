@@ -17,31 +17,14 @@ const isLoggedInChange = (state, { payload }) => {
     
 }
 
-const setUserInformationFullFilled = (state, { payload }) => {
-    if(payload.docs.length){
-        const user = payload.docs[0].data()
-        return {
-            ...state,
-            currentUser: user
-        }
-    } else {
-        return {
-            ...state,
-            error: true
-        }
-    }
-}
-
-const setUserInformationRejected = (state, { payload }) => ({
+const setUserInformation = (state, { payload }) => ({
     ...state,
-    currentUser: {},
-    error: payload
+    currentUser: payload.user
 })
 
 const Auth = {
     [Actions.IS_LOGGED_IN_CHANGE]: isLoggedInChange,
-    [fullfilled(Actions.SET_USER_INFORMATION)]: setUserInformationFullFilled,
-    [rejected(Actions.SET_USER_INFORMATION)]: setUserInformationRejected
+    [Actions.SET_USER_INFORMATION]: setUserInformation,
 }
 
 export default Auth
