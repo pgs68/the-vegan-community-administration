@@ -5,7 +5,8 @@ import 'firebase/storage'
 const TypeActionsCrud = {
     GET_PENDING_PRODUCTS: 'GET_PENDING_PRODUCTS',
     GET_REPORTED_PRODUCTS: 'GET_REPORTED_PRODUCTS',
-    GET_REPORTED_COMMENTS: 'GET_REPORTED_COMMENTS'
+    GET_REPORTED_COMMENTS: 'GET_REPORTED_COMMENTS',
+    DELETE_COMMENT_REPORT: 'DELETE_COMMENT_REPORT'
 }
 
 const getPendingProducts = () => ({
@@ -23,9 +24,15 @@ const getReportedComments = () => ({
     payload: firebase.firestore().collection("reportes").where('tipo', '==', 'comentario').get()
 })
 
+const deleteCommentReport = (idReport) => ({
+    type: TypeActionsCrud.DELETE_COMMENT_REPORT,
+    payload: firebase.firestore().collection("reportes").doc(idReport).delete()
+})
+
 export {
     TypeActionsCrud,
     getPendingProducts,
     getReportedProducts,
-    getReportedComments
+    getReportedComments,
+    deleteCommentReport
 }

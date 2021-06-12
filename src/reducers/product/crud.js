@@ -44,7 +44,7 @@ const getReportedCommentsFullfilled = (state, { payload }) => {
     if(payload.docs.length){
         payload.docs.forEach((doc) => {
             var comentario = doc.data()
-            comentarios.push(comentario)
+            comentarios.push({...comentario, id: doc.id})
         })
         return {
             ...state,

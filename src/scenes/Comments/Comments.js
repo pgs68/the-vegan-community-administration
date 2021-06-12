@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { connect } from 'react-redux'
-import { getReportedComments } from '../../actions/product'
+import { getReportedComments, deleteCommentReport } from '../../actions/product'
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -53,12 +53,19 @@ const useStyles = makeStyles(() => ({
 
 const Comments = ({
     getReportedComments,
-    comentarios
+    comentarios,
+    deleteCommentReport
 }) => {
     const classes = useStyles();
     useEffect(() => {
         getReportedComments()
     }, [])
+
+    async function deleteReport(id){
+        await deleteCommentReport(id)
+        getReportedComments()
+    }
+
     return (
         <div className={classes.root}>
             <div className={classes.column}>
@@ -92,8 +99,8 @@ const Comments = ({
                                                 </div>
                                             </div>
                                             <div>
-                                                <Button variant="outlined" style={{marginRight: 5 }}>Eliminar comentario</Button>
-                                                <Button variant="outlined">Eliminar reporte</Button>
+                                                <Button variant="outlined" style={{marginRight: 5 }} onClick={() => deleteReport(c.id)}>Eliminar comentario</Button>
+                                                <Button variant="outlined" onClick={() => deleteReport(c.id)}>Eliminar reporte</Button>
                                             </div>
                                         </CardContent>
                                     </div>
@@ -112,7 +119,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-    getReportedComments
+    getReportedComments,
+    deleteCommentReport
 }
 
 const CommentsConnected = connect(mapStateToProps, mapDispatchToProps)(Comments)
