@@ -25,41 +25,43 @@ const Header = ({
     const [openUserOptions, setOpenUserOptions] = useState(false)
 
     return (
-        <AppBar position="sticky">
-          <Toolbar className={classes.toolbar}>
-            <div />
-            <Typography variant="h6"> TheVeganCommunity </Typography>
-            <IconButton edge="end" color="inherit">
-                {userLogged && (
-                    <div>
-                        <AccountCircle 
-                            onClick={() => setOpenUserOptions(true)}
-                        />
-                        <Menu
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={openUserOptions}
-                            onClose={() => setOpenUserOptions(false)}
-                            
-                        >
-                            <MenuItem onClick={() => {
-                                setOpenUserOptions(false)
-                                logout(userLoggedChange)
-                            }}> 
-                                Cerrar sesión 
-                            </MenuItem>
-                        </Menu>
-                    </div>
-                )}
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+        <>
+            <AppBar position="sticky">
+                <Toolbar className={classes.toolbar} >
+                    <div />
+                    <Typography variant="h6"> TheVeganCommunity </Typography>
+                    <IconButton edge="end" color="inherit">
+                        {userLogged && (
+                            <div>
+                                <AccountCircle 
+                                    onClick={() => setOpenUserOptions(true)}
+                                />
+                                <Menu
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={openUserOptions}
+                                    onClose={() => setOpenUserOptions(false)}
+                                    
+                                >
+                                    <MenuItem onClick={() => {
+                                        setOpenUserOptions(false)
+                                        logout(userLoggedChange)
+                                    }}> 
+                                        Cerrar sesión 
+                                    </MenuItem>
+                                </Menu>
+                            </div>
+                        )}
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+        </>
     )
 }
 
