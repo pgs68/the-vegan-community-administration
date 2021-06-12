@@ -1,7 +1,9 @@
 import {
     TypeActionsCrud,
     getPendingProducts,
-    getReportedProducts
+    getReportedProducts,
+    getReportedComments,
+    deleteCommentReport
 } from './crud'
 
 const Actions = {
@@ -11,5 +13,7 @@ const Actions = {
 export {
     Actions,
     getPendingProducts,
-    getReportedProducts
+    getReportedProducts,
+    getReportedComments,
+    deleteCommentReport
 }

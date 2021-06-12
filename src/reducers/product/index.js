@@ -3,6 +3,7 @@ import Crud from './crud'
 const initialState = {
     productosPendientes: [],
     productosReportados: [],
+    comentariosReportados: [],
     error: false
 }
 
