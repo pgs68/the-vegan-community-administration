@@ -40,7 +40,7 @@ const theme = createMuiTheme({
       main: '#f57f17',
       dark: '#bc5100',
       contrastText: '#000',
-    },
+    }
   },
 });
 
