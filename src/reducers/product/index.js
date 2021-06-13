@@ -4,6 +4,8 @@ const initialState = {
     productosPendientes: [],
     productosReportados: [],
     comentariosReportados: [],
+    reviewProduct: null,
+    reportedProduct: null,
     error: false
 }
 

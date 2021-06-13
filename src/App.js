@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Home from './scenes/Home'
 import Login from './scenes/Login'
 import Comments from './scenes/Comments'
+import ReviewProduct from './scenes/ReviewProduct'
 
 import { isLoggedInChange, setUserInformation } from './actions/user'
 import { checkUserRolIsAdmin, getUserInformation } from './common/firebaseFunctions'
@@ -94,6 +95,12 @@ const App = ({
           <PublicRoute 
             component={(userLogged && currentUser.email !== '') ? () => <Redirect to={"/"} /> : Login}
             path="/login"
+            exact
+          />
+          <PrivateRoute 
+            component={ReviewProduct}
+            path="/reviewProduct"
+            isLogedIn={userLogged}
             exact
           />
           <PrivateRoute
