@@ -1,10 +1,10 @@
 import React, { useEffect } from "react"
 import { connect } from 'react-redux'
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { getPendingProducts, getReportedProducts } from '../../actions/product'
+import { getPendingProducts, getReportedProducts, getReviewProduct } from '../../actions/product'
 import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ErrorIcon from '@material-ui/icons/Error';
@@ -53,9 +53,11 @@ const Home = ({
     getPendingProducts,
     getReportedProducts,
     productosPendientes,
-    productosReportados
+    productosReportados,
+    getReviewProduct
 }) => {
     const classes = useStyles();
+    const history = useHistory();
     useEffect(() => {
         getPendingProducts()
         getReportedProducts()
@@ -92,8 +94,15 @@ const Home = ({
                                                 {p.precio}€
                                             </Typography>
                                             <div className="buttonsProductCard">
-                                                <Button variant="outlined">Ver detalles</Button>
-                                                <Button variant="outlined" endIcon={<DeleteIcon />}>Eliminar</Button>
+                                                <Button 
+                                                    variant="outlined" 
+                                                    onClick={() => {
+                                                        getReviewProduct(p.id)
+                                                        history.push('reviewProduct')
+                                                    }}>Ver detalles</Button>
+                                                <Button 
+                                                    variant="outlined" 
+                                                    endIcon={<DeleteIcon />}>Eliminar</Button>
                                             </div>
                                         </CardContent>
                                     </div>
@@ -161,7 +170,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     getPendingProducts,
-    getReportedProducts
+    getReportedProducts,
+    getReviewProduct
 }
 
 const HomeConnected = connect(mapStateToProps, mapDispatchToProps)(Home)
