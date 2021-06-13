@@ -9,7 +9,8 @@ const TypeActionsCrud = {
     DELETE_COMMENT_REPORT: 'DELETE_COMMENT_REPORT',
     GET_REPORTED_PRODUCT: 'GET_REPORTED_PRODUCT',
     GET_REVIEW_PRODUCT: 'GET_REVIEW_PRODUCT',
-    DELETE_PRODUCT: 'DELETE_PRODUCT'
+    DELETE_PRODUCT: 'DELETE_PRODUCT',
+    EDIT_PRODUCT: 'EDIT_PRODUCT'
 }
 
 const getPendingProducts = () => ({
@@ -47,6 +48,11 @@ const deleteProduct = (idProduct) => ({
     payload: firebase.firestore().collection("productos").doc(idProduct).delete()
 })
 
+const editProduct = (idProduct, product) => ({
+    type: TypeActionsCrud.EDIT_PRODUCT,
+    payload: firebase.firestore().collection("productos").doc(idProduct).set(product)
+})
+
 export {
     TypeActionsCrud,
     getPendingProducts,
@@ -55,5 +61,6 @@ export {
     deleteCommentReport,
     getReportedProduct,
     getReviewProduct,
-    deleteProduct
+    deleteProduct,
+    editProduct
 }

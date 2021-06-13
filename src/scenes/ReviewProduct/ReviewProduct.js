@@ -1,5 +1,6 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { connect } from 'react-redux'
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
@@ -7,6 +8,8 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import { editProduct, deleteProduct } from '../../actions/product'
+
 
 
 const useStyles = makeStyles(() => ({
@@ -25,7 +28,8 @@ const useStyles = makeStyles(() => ({
     },
     column:{
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        justifyContent: 'center'
     },
     title:{
         textAlign: 'center',
@@ -49,17 +53,36 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ReviewProduct = ({
-    product
+    product,
+    editProduct,
+    deleteProduct
 }) => {
     const classes = useStyles();
-    var supermarketsText = ''
-    product.supermercados.map(s => {
-        if(product.supermercados.indexOf(s) === (product.supermercados.length - 1)){
-            supermarketsText += s
-        } else {
-            supermarketsText += (s + ', ')
-        }
-    })
+    const history = useHistory();
+    const [supermarketsText, setSupermarketText] = useState('')
+    useEffect(() => {
+        var text = ''
+        product !== null && product.supermercados.map(s => 
+        {
+            if(product.supermercados.indexOf(s) === (product.supermercados.length - 1)){
+                text += s
+            } else {
+                text += (s + ', ')
+            }
+        }) && setSupermarketText(text)
+    }, [product])
+    
+
+    async function aceptProduct(){
+        await editProduct(product.codebar, {...product, estado: 'aceptado'})
+        history.push('')
+    }
+
+    async function rejectProduct(){
+        await deleteProduct(product.codebar)
+        history.push('')
+    }
+
     return(
         <div className={classes.root}>
             <div className={classes.column}>
@@ -89,12 +112,18 @@ const ReviewProduct = ({
                                     <Button
                                         variant="outlined"
                                         endIcon={<CheckIcon />}
+                                        onClick={() => {
+                                            aceptProduct()
+                                        }}
                                     >
                                         Aceptar
                                     </Button>
                                     <Button
                                         variant="outlined"
-                                        endIcon={<CloseIcon />} 
+                                        endIcon={<CloseIcon />}
+                                        onClick={() => {
+                                            rejectProduct()
+                                        }} 
                                     >
                                         Rechazar
                                     </Button>
@@ -115,7 +144,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-
+    editProduct,
+    deleteProduct
 }
 
 const ReviewProductConnected = connect(mapStateToProps, mapDispatchToProps)(ReviewProduct)
