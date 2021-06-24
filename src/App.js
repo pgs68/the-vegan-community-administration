@@ -16,6 +16,7 @@ import Home from './scenes/Home'
 import Login from './scenes/Login'
 import Comments from './scenes/Comments'
 import ReviewProduct from './scenes/ReviewProduct'
+import ReportedProduct from './scenes/ReportedProduct'
 
 import { isLoggedInChange, setUserInformation } from './actions/user'
 import { checkUserRolIsAdmin, getUserInformation } from './common/firebaseFunctions'
@@ -100,6 +101,12 @@ const App = ({
           <PrivateRoute 
             component={ReviewProduct}
             path="/reviewProduct"
+            isLogedIn={userLogged}
+            exact
+          />
+          <PrivateRoute 
+            component={ReportedProduct}
+            path="/reportedProduct"
             isLogedIn={userLogged}
             exact
           />
