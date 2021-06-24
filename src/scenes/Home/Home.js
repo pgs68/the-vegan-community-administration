@@ -3,7 +3,15 @@ import { connect } from 'react-redux'
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { getPendingProducts, getReportedProducts, getReviewProduct, deleteProduct } from '../../actions/product'
+import { 
+    getPendingProducts, 
+    getReportedProducts, 
+    getReviewProduct, 
+    getReportedProduct, 
+    deleteProduct, 
+    getCommentsFromReportedProduct,
+    getReportsFromProduct 
+} from '../../actions/product'
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -55,6 +63,9 @@ const Home = ({
     productosPendientes,
     productosReportados,
     getReviewProduct,
+    getReportedProduct,
+    getCommentsFromReportedProduct,
+    getReportsFromProduct,
     deleteProduct
 }) => {
     const classes = useStyles();
@@ -68,6 +79,13 @@ const Home = ({
         await deleteProduct(idProduct)
         getPendingProducts()
         getReportedProducts()
+    }
+
+    async function clickReportedProduct(idProduct){
+        await getReportedProduct(idProduct)
+        await getCommentsFromReportedProduct(idProduct)
+        await getReportsFromProduct(idProduct)
+        history.push('reportedProduct')
     }
     return (
         <div className={classes.root}>
@@ -161,8 +179,20 @@ const Home = ({
                                             </div>
                                             
                                             <div className="buttonsProductCard">
-                                                <Button variant="outlined">Ver detalles</Button>
-                                                <Button variant="outlined" endIcon={<DeleteIcon />}>Eliminar</Button>
+                                                <Button 
+                                                    variant="outlined"
+                                                    onClick={() => {
+                                                        clickReportedProduct(p.id)
+                                                    }}
+                                                >Ver detalles</Button>
+                                                <Button 
+                                                    variant="outlined" 
+                                                    endIcon={<DeleteIcon />}
+                                                    onClick={() => {
+                                                        clickDeleteProduct(p.id)
+                                                        
+                                                    }}
+                                                >Eliminar</Button>
                                             </div>
                                         </CardContent>
                                     </div>
@@ -185,7 +215,10 @@ const mapDispatchToProps = {
     getPendingProducts,
     getReportedProducts,
     getReviewProduct,
-    deleteProduct
+    getReportedProduct,
+    deleteProduct,
+    getCommentsFromReportedProduct,
+    getReportsFromProduct,
 }
 
 const HomeConnected = connect(mapStateToProps, mapDispatchToProps)(Home)

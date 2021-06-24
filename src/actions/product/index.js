@@ -7,7 +7,11 @@ import {
     getReportedProduct,
     getReviewProduct,
     deleteProduct,
-    editProduct
+    editProduct,
+    getCommentsFromReportedProduct,
+    getReportsFromProduct,
+    deleteCommentFromProduct,
+    deleteReportFromProduct
 } from './crud'
 
 const Actions = {
@@ -23,5 +27,9 @@ export {
     getReportedProduct,
     getReviewProduct,
     deleteProduct,
-    editProduct
+    editProduct,
+    getCommentsFromReportedProduct,
+    getReportsFromProduct,
+    deleteCommentFromProduct,
+    deleteReportFromProduct
 }
